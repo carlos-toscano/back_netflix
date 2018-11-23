@@ -56,6 +56,8 @@ function upgradeSubscription(_, args, context, info) {
         upgradeSub(subscription, user_payment, args.type);
 
         return 'Subscription upgrade successfully';
+    }).catch(err => {
+        throw err;
     })
 }
 
