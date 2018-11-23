@@ -1,3 +1,5 @@
+const { SECRET_KEY_STRIPE } = require('./../const');
+const Stripe = require('stripe')(SECRET_KEY_STRIPE);
 const Users = require('./../schemas/Users');
 const Movies = require('./../schemas/Movies');
 const Subscriptions = require('./../schemas/Subscriptions');
@@ -61,11 +63,26 @@ function upgradeSubscription(_, args, context, info) {
     })
 }
 
+function addSource(_, args, context, info) {
+    if (!context.user) throw new Error('Authentication required');
+
+    const { user_payment } = context.user;
+
+    Stripe.customers.createSource(user_payment, {
+        source: args.source
+    }, (err, customer) => {
+        if (err) throw err;
+    });
+
+    return 'Source added successfully';
+}
+
 module.exports = {
     signup,
     login,
     createMovie,
     updateMovie,
     deleteMovie,
-    upgradeSubscription
+    upgradeSubscription,
+    addSource
 }
