@@ -1,0 +1,65 @@
+#import Movie, MovieInput, MovieInputUpdate from './graphql/movies.graphql';
+
+type Query {
+    prueba: String!,
+    movies: [ Movie! ]!,
+    movie(id: ID): Movie,
+    me: User
+}
+
+type Mutation {
+    signup (data: UserInput!): AuthToken,
+    login(email: String!, password: String!): AuthToken,
+    createMovie(data: MovieInput!): Movie
+    updateMovie(id: String!, data: MovieInputUpdate!): Movie
+    deleteMovie(id: String): Boolean,
+    upgradeSubscription(type: Subscriptions!): String
+}
+
+enum Subscriptions {
+    BASIC,
+    GOLD,
+    PREMIUM,
+    PLATINUM,
+}
+
+input UserInput {
+    first_name: String!,
+    last_name: String!,
+    email: String!,
+    password: String!,
+    birth_date: String,
+    gender: Gender,
+    nationality: String
+}
+
+type User {
+    first_name: String
+    last_name: String
+    email: String
+    birth_date: String
+    gender: Gender
+    nationality: String
+    history:  [ Movie ]
+    favorites: [ Movie ]
+    subscription_id: Subscription
+    is_active: Boolean
+}
+
+type Subscription {
+    type_subscription: Subscriptions
+    price: String,
+    start_date: String,
+    end_date: String,
+    stripe_id: String
+    is_active: Boolean
+}
+
+enum Gender {
+    Male,
+    Female
+}
+
+type AuthToken {
+    token: String!
+}
