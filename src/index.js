@@ -1,10 +1,16 @@
 const { GraphQLServer } = require('graphql-yoga');
+const { importSchema } = require('graphql-import');
+const { makeExecutableSchema } = require('graphql-tools');
+const { MONGO_URI, MONGO_URI_TEST } = require('./const');
+const mongoose = require('mongoose');
 const Query = require('./resolvers/Query');
 const Mutation = require('./resolvers/Mutation');
-const mongoose = require('mongoose');
 const verifyToken = require('./utils/verifyToken');
+const mongoUri = process.env.NODE_ENV === 'test' ? MONGO_URI_TEST : MONGO_URI;
 
-mongoose.connect('mongodb://netflix:netflix@cluster0-shard-00-00-clh7g.mongodb.net:27017,cluster0-shard-00-01-clh7g.mongodb.net:27017,cluster0-shard-00-02-clh7g.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true', { useNewUrlParser: true });
+const typeDefs = importSchema('./src/schema.graphql');
+
+mongoose.connect(mongoUri, { useNewUrlParser: true });
 
 const db = mongoose.connection;
 
@@ -16,9 +22,13 @@ const resolvers = {
     Mutation
 };
 
+const schema = makeExecutableSchema({
+    typeDefs,
+    resolvers
+})
+
 const server = new GraphQLServer({
-    typeDefs: './src/schema.graphql',
-    resolvers,
+    schema,
     context: async context => ({
         ...context,
         user: await verifyToken(context.request)
@@ -28,7 +38,13 @@ const server = new GraphQLServer({
 const options = {
     port: 8000,
     endpoint: '/graphql',
-    playground: '/playground'
+    playground: '/playground',
+    cors: {
+        credentials: true,
+        origin: ['*']
+    }
 };
 
 server.start(options, ({port}) => console.log(`Server started at port ${port}`));
+
+module.exports = { schema };
