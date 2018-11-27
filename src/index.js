@@ -36,7 +36,7 @@ const server = new GraphQLServer({
 })
 
 const options = {
-    port: 8000,
+    port: 3000,
     endpoint: '/graphql',
     playground: '/playground',
     cors: {
