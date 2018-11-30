@@ -41,8 +41,9 @@ const options = {
     playground: '/playground',
     cors: {
         credentials: true,
-        cors: '*'
-    }
+        origin: '*'
+    },
+    methods: ['GET','POST','PUT','DELETE','OPTIONS']
 };
 
 server.start(options, ({ port }) => console.log(`Server started at port ${port}`));
