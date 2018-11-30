@@ -41,8 +41,7 @@ const options = {
     playground: '/playground',
     cors: {
         origin: '*'
-    },
-    methods: ['GET','POST','PUT','DELETE','OPTIONS']
+    }
 };
 
 server.start(options, ({ port }) => console.log(`Server started at port ${port}`));
