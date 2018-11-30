@@ -40,7 +40,6 @@ const options = {
     endpoint: '/graphql',
     playground: '/playground',
     cors: {
-        credentials: true,
         origin: '*'
     },
     methods: ['GET','POST','PUT','DELETE','OPTIONS']
