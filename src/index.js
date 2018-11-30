@@ -33,18 +33,17 @@ const server = new GraphQLServer({
         ...context,
         user: await verifyToken(context.request)
     })
-})
+});
 
 const options = {
     port: process.env.PORT || 8000,
     endpoint: '/graphql',
     playground: '/playground',
     cors: {
-        credentials: true,
-        origin: '*'
+        credentials: true
     }
 };
 
-server.start(options, ({port}) => console.log(`Server started at port ${port}`));
+server.start(options, ({ port }) => console.log(`Server started at port ${port}`));
 
 module.exports = { schema };
