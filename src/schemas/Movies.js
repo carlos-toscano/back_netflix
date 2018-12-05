@@ -7,7 +7,7 @@ const MovieSchema = new Schema({
     },
     genre: {
         type: String,
-        enum: ["ACTION", "SCIFY", "DRAMA", "COMEDY", "HORROR"],
+        enum: ['ACTION', 'SCIFY', 'DRAMA', 'COMEDY', 'HORROR'],
         required: true
     },
     director: {
