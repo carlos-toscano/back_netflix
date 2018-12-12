@@ -17,6 +17,8 @@ function movies(_, args, context, info) {
 }
 
 function movie(_, args, context, info) {
+    if (!context.user) throw new Error('Authentication required');
+
     return Movies.findById(args.id).then(movie => {
         return movie.toObject();
     }).catch(err => {
